@@ -1,0 +1,9 @@
+# Local development: publishes the app on :3000, no Caddy / TLS.
+# docker compose -f docker-compose.dev.yml up
+services:
+  web:
+    build: .
+    env_file: .env
+    restart: unless-stopped
+    ports:
+      - "3000:3000"

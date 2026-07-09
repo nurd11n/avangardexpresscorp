@@ -1,0 +1,8 @@
+avangardexpresscorp.com {
+	redir https://www.avangardexpresscorp.com{uri} permanent
+}
+
+www.avangardexpresscorp.com {
+	encode gzip zstd
+	reverse_proxy web:3000
+}

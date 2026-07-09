@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-ink text-paper font-body text-base antialiased;
+  }
+
+  ::selection {
+    @apply bg-blue-deep text-paper;
+  }
+
+  :focus-visible {
+    outline: 2px solid #3e9bcb;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /*
+   * Lane rule — 2px dashed section separator proportioned like a US highway
+   * skip line (10ft dash / 30ft gap → 1:3). On first reveal the dashes slide
+   * once, then stop.
+   */
+  .lane-rule {
+    height: 2px;
+    background-image: repeating-linear-gradient(
+      to right,
+      #232a33 0,
+      #232a33 24px,
+      transparent 24px,
+      transparent 96px
+    );
+    background-size: 96px 2px;
+  }
+
+  .lane-rule.is-inview {
+    animation: lane-pass 600ms ease-out 1;
+  }
+
+  @keyframes lane-pass {
+    from {
+      background-position-x: -96px;
+    }
+    to {
+      background-position-x: 0;
+    }
+  }
+
+  /* Section reveal: fade + rise 12px, once. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 400ms ease-out,
+      transform 400ms ease-out;
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal.is-inview {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .lane-rule.is-inview {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

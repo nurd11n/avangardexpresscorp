@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+README.md
+CLAUDE.md
+Dockerfile
+docker-compose*.yml
+Caddyfile
+.DS_Store
+*.tsbuildinfo
