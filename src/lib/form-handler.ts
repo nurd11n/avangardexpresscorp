@@ -47,6 +47,18 @@ export async function handleFormPost<T extends { website?: string; ts: number }>
     );
   }
 
+  // Shed oversized bodies before spending CPU on JSON parsing — the largest
+  // legitimate payload (RGN form, every field at its zod max) is well under
+  // 10 KB. Content-Length is untrusted, but lying about it doesn't help an
+  // attacker: zod's field-length caps still bound what we process.
+  const contentLength = Number(req.headers.get('content-length') ?? 0);
+  if (contentLength > 10_240) {
+    return NextResponse.json(
+      { ok: false, errors: { form: 'payload_too_large' } },
+      { status: 413 },
+    );
+  }
+
   let body: unknown;
   try {
     body = await req.json();

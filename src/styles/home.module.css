@@ -113,10 +113,29 @@
   font-size: 13px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 @media (max-width: 820px) {
   .navLinks {
     display: none;
+  }
+
+  /* Mobile header is cramped (logo + CTA + hamburger). Slim the CTA down
+     so it reads as one compact line instead of a chunky two-line block;
+     the logo also gets nowrap so the two don't fight for wrap space.
+     Desktop keeps the larger button above. */
+  .navCta {
+    padding: 11px 16px; /* ~40px tall — slim but still a comfortable tap target */
+    font-size: 12px;
+    letter-spacing: 0.03em;
+  }
+  .logo {
+    font-size: 17px;
+    white-space: nowrap;
+  }
+  .nav {
+    padding: 14px 20px;
+    gap: 12px;
   }
 }
 
