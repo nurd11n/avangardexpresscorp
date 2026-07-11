@@ -17,7 +17,11 @@
       "Bash(grep -A 18 \"AVG-260710-8647\\\\|AVG-260710-8072\\\\|AVG-260710-3988\" /tmp/next-dev4.log)",
       "Bash(python3 -c ' *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(curl -s -o /dev/null -D - -X POST http://localhost:3000/api/quote -H \"Content-Type: application/json\" -d '{}')",
+      "Bash(curl -sI http://localhost:3000/robots.txt)",
+      "Bash(cp -r public .next/standalone/public)",
+      "Bash(cp -r .next/static .next/standalone/.next/static)"
     ]
   }
 }
