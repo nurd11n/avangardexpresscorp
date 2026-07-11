@@ -21,7 +21,8 @@
       "Bash(curl -s -o /dev/null -D - -X POST http://localhost:3000/api/quote -H \"Content-Type: application/json\" -d '{}')",
       "Bash(curl -sI http://localhost:3000/robots.txt)",
       "Bash(cp -r public .next/standalone/public)",
-      "Bash(cp -r .next/static .next/standalone/.next/static)"
+      "Bash(cp -r .next/static .next/standalone/.next/static)",
+      "Bash(git push *)"
     ]
   }
 }
