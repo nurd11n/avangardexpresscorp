@@ -9,9 +9,9 @@ import { Truck, Headset, Clock, Tag } from 'lucide-react';
 export const site = {
   legalName: 'Avangard Express Corp',
   email: 'admin1@avangardexpresscorp.com',
-  phone: '[Add phone number]',
-  office: '[Add city, state]',
-  authority: '[Add USDOT / MC number]',
+  phone: '+1 845 587-4897',
+  office: 'Wheeling, IL',
+  authority: 'USDOT 4229721 · MC1636213',
   hours: 'Dispatch available 24/7',
 };
 
@@ -76,3 +76,7 @@ export const whyItems: WhyItem[] = [
     blurb: 'Clear, lane-based pricing with no surprise accessorials.',
   },
 ];
+
+export function telHref(phone: string): string {
+  return `tel:${phone.replace(/[^+\d]/g, '')}`;
+}

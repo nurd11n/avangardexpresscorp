@@ -2,7 +2,7 @@
 
 import { useMemo, useState, type FormEvent } from 'react';
 import Link from 'next/link';
-import { site } from '@content/site';
+import { site, telHref } from '@content/site';
 import type { ApiResponse } from '@/lib/schemas';
 import styles from '@/styles/home.module.css';
 
@@ -92,7 +92,9 @@ export function Contact() {
             </div>
             <div className={styles.row}>
               <span>Phone</span>
-              <span>{site.phone}</span>
+              <span>
+                <a href={telHref(site.phone)}>{site.phone}</a>
+              </span>
             </div>
             <div className={styles.row}>
               <span>Office</span>
