@@ -24,10 +24,7 @@ react           ^18.3.1
 react-dom       ^18.3.1
 nodemailer      ^6.9.15    — SMTP email delivery (src/lib/mailer.ts)
 zod             ^3.23.8    — form validation (src/lib/schemas.ts)
-lucide-react    ^0.446.0   — icons (menu/close in Header.tsx)
-sharp           ^0.33.5    — only used by `pnpm placeholders`, a dev-only
-                             image-generation script; not needed at runtime
-                             or in the Docker image (see NOTE below)
+lucide-react    ^0.446.0   — icons (Header, WhyUs, etc.)
 
 4. BUILD-TIME / DEV DEPENDENCIES
 ---------------------------------
@@ -64,13 +61,16 @@ META_PIXEL_ID              enables Meta/Facebook Pixel tracking when set
     docker compose -f docker-compose.dev.yml up --build     # local, :3000, no TLS
     docker compose up --build -d                             # production, Caddy + TLS on :80/:443
 
-8. NOTE — stale scripts flagged, not touched
------------------------------------------------
-scripts/gen-placeholders.mjs (`pnpm placeholders`) generates hero/OG/fleet
-placeholder images. The site no longer uses any images (removed at your
-request), so running this script now would regenerate files that don't fit
-the current design. scripts/smoke.mjs also predates the rebuild — it tests
-routes/fields (bilingual EN/RU, /api/apply, the old /api/quote shape) that
-no longer exist and would fail as-is. Left both in place rather than
-deleting since you may want to update/keep them — ask if you'd like me to
-either rewrite smoke.mjs against the current site or remove both.
+8. NOTE — deploy fix (2026-07-11) and one remaining stale script
+---------------------------------------------------------------------
+`sharp` and `scripts/gen-placeholders.mjs` were removed — sharp's native
+install script was being blocked by pnpm's supply-chain-policy gate
+(`ERR_PNPM_IGNORED_BUILDS`), which was failing the Docker build on Render.
+It was only used to generate placeholder images the site no longer has any
+use for, so the fix was to delete it, not approve the build script.
+
+scripts/smoke.mjs still predates the rebuild — it tests routes/fields
+(bilingual EN/RU, /api/apply, the old /api/quote shape) that no longer
+exist and would fail as-is. Left in place since you may want it
+updated rather than deleted — ask if you'd like it rewritten against the
+current site.
