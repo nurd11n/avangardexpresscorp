@@ -50,7 +50,7 @@ export function Hero() {
             </div>
             <div className={styles.manifestRow}>
               <span>Status</span>
-              <span style={{ color: 'var(--signal-amber)' }}>Accepting Loads</span>
+              <span style={{ color: 'var(--accent-text)' }}>Accepting Loads</span>
             </div>
           </div>
         </div>

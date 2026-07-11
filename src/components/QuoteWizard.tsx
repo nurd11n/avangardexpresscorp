@@ -4,6 +4,7 @@ import { useMemo, useState, type FormEvent, type ReactNode } from 'react';
 import Link from 'next/link';
 import { site } from '@content/site';
 import type { ApiResponse } from '@/lib/schemas';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import styles from '@/styles/quote.module.css';
 
 type StepKey = '1' | '2' | 'rgn' | 'dryvan' | 'confirm';
@@ -275,6 +276,7 @@ export function QuoteWizard() {
     <div className={styles.quotePage}>
       <div className={styles.topNav}>
         <Link href="/">&larr; Back to Avangard Express</Link>
+        <ThemeToggle className={styles.topNavTheme} />
       </div>
       <div className={styles.wrap}>
         <div className={styles.ticket}>

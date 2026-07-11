@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import styles from '@/styles/home.module.css';
 
 const NAV = [
@@ -29,6 +30,9 @@ export function Header() {
             </a>
           ))}
         </div>
+        {/* Hidden below 820px — the mobile header row is already full, so
+            the toggle lives in the slide-down panel there instead. */}
+        <ThemeToggle className={`${styles.themeBtn} ${styles.headerTheme}`} />
         <Link href="/quote" className={styles.navCta}>
           Get a Quote
         </Link>
@@ -54,6 +58,10 @@ export function Header() {
             <Link href="/quote" className={styles.navCta} onClick={() => setOpen(false)}>
               Get a Quote
             </Link>
+            <div className={styles.panelThemeRow}>
+              <span>Appearance</span>
+              <ThemeToggle className={styles.themeBtn} />
+            </div>
           </nav>
         </div>
       )}

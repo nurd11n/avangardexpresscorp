@@ -5,7 +5,9 @@
 :root {
   /* Used by the legal pages (privacy/terms), which still use Tailwind's
      token classes. The home/quote pages define their own palette in
-     src/styles/{home,quote}.css since they intentionally look different. */
+     src/styles/{home,quote}.module.css since they intentionally look
+     different. Theme is set as data-theme on <html> by the inline script
+     in layout.tsx (pre-hydration, so no flash of the wrong theme). */
   --color-ink: #14181c;
   --color-surface: #232a31;
   --color-line: #232a31;
@@ -14,6 +16,16 @@
   --color-blue: #3e9bcb;
   --color-blue-deep: #1d5f82;
   --color-amber: #f2a93b;
+}
+
+[data-theme='light'] {
+  --color-ink: #f5f3ef;
+  --color-surface: #ffffff;
+  --color-line: #d5d0c4;
+  --color-haze: #525c66;
+  --color-paper: #191c1f;
+  --color-blue: #1d5f82;
+  --color-blue-deep: #cfe0d4;
 }
 
 @layer base {

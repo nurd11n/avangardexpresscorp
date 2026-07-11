@@ -46,8 +46,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const pixelId = process.env.META_PIXEL_ID;
 
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
       <body>
+        {/* Runs before paint: stored choice wins, otherwise follow the OS
+            preference, defaulting to dark (the brand look). Inline (not a
+            Script component) so it blocks first paint and the page can never
+            flash the wrong theme. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('theme');var t=(s==='light'||s==='dark')?s:(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`,
+          }}
+        />
         {children}
         <script
           type="application/ld+json"

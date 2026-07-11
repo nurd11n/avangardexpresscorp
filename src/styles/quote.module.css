@@ -19,23 +19,51 @@
   --ink: #191c1f;
   --ink-soft: #5b6472;
 
-  background: var(--asphalt);
+  /* Theme-adaptive: the ticket (concrete card + dark header band) is a
+     fixed physical object in both themes — only the page it sits on and
+     the amber-text accent flip. The perforation "holes" must always match
+     the page background, hence --page-bg instead of --asphalt there. */
+  --page-bg: #14181c;
+  --accent-text: #f2a93b;
+
+  background: var(--page-bg);
   color: var(--ink);
   padding: 40px 16px;
   min-height: 100vh;
 }
 
+:global([data-theme='light']) .quotePage {
+  --page-bg: #f5f3ef;
+  --accent-text: #8a5a10;
+}
+
 .topNav {
   max-width: 640px;
   margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 .topNav a {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--signal-amber);
+  color: var(--accent-text);
   text-decoration: none;
+}
+.topNavTheme {
+  display: flex;
+  height: 36px;
+  width: 36px;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--accent-text);
+  color: var(--accent-text);
+  cursor: pointer;
+  border-radius: 3px;
 }
 .wrap {
   max-width: 640px;
@@ -93,7 +121,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--asphalt);
+  background: var(--page-bg);
 }
 .perf::before {
   left: -11px;
