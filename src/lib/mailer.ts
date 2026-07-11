@@ -29,7 +29,7 @@ export async function sendMail({ subject, text }: Mail): Promise<void> {
 
   await transporter.sendMail({
     from: process.env.SMTP_USER ?? 'noreply@avangardexpresscorp.com',
-    to: process.env.MAIL_TO ?? 'office@avangardexpresscorp.com',
+    to: process.env.MAIL_TO ?? 'admin1@avangardexpresscorp.com',
     subject,
     text,
   });

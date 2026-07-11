@@ -1,34 +1,31 @@
-import { site } from '@content/site';
-import { dict, t, type Lang } from '@/lib/i18n';
-import { Section, SectionTitle } from '@/components/ui/Section';
+import { services } from '@content/site';
+import styles from '@/styles/home.module.css';
 
-export function Services({ lang }: { lang: Lang }) {
+export function Services() {
   return (
-    <Section id="services">
-      <SectionTitle>{t(dict.sections.services, lang)}</SectionTitle>
-
-      <div className="mt-10 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-        {site.services.map((service) => {
-          const Icon = service.icon;
-          return (
-            <article key={service.id} className="bg-ink p-6">
-              <Icon className="h-6 w-6 text-blue" aria-hidden="true" strokeWidth={1.5} />
-              <h3 className="mt-4 font-display text-lg font-bold uppercase tracking-tight text-paper">
-                {t(service.name, lang)}
-              </h3>
-              <p className="mt-2 text-sm text-haze">{t(service.blurb, lang)}</p>
-              <ul className="mt-4 space-y-1.5">
-                {service.specs.map((spec, i) => (
-                  <li key={i} className="font-mono text-xs text-haze">
-                    <span className="text-blue">— </span>
-                    {t(spec, lang)}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          );
-        })}
+    <section id="services" className={styles.sectionPad}>
+      <div className={styles.wrap}>
+        <div className={styles.sectionHead}>
+          <h2>
+            Built for one load
+            <br />
+            at a time.
+          </h2>
+          <p>
+            Avangard runs full truckload exclusively — every trailer is dedicated to a single
+            shipper from pickup to delivery.
+          </p>
+        </div>
+        <div className={styles.servicesGrid}>
+          {services.map((service) => (
+            <div key={service.title} className={styles.serviceCard}>
+              <div className={styles.tag}>{service.tag}</div>
+              <h3>{service.title}</h3>
+              <p>{service.blurb}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

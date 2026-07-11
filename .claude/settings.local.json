@@ -4,7 +4,18 @@
       "Bash(corepack enable *)",
       "Bash(corepack prepare *)",
       "Bash(pnpm --version)",
-      "Bash(node scripts/gen-placeholders.mjs)"
+      "Bash(node scripts/gen-placeholders.mjs)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" --max-time 5 https://fonts.googleapis.com/css2?family=Oswald)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" --max-time 5 \"https://fonts.googleapis.com/css2?family=Oswald\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" --max-time 5 \"https://fonts.gstatic.com\")",
+      "Bash(sleep 2; cat /tmp/next-dev.log)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s http://localhost:3000 -o /tmp/home.html)",
+      "Read(//tmp/**)",
+      "Bash(grep -A 15 \"AVG-260710-8328\" /tmp/next-dev.log)",
+      "Bash(git mv *)",
+      "Bash(grep -A 18 \"AVG-260710-8647\\\\|AVG-260710-8072\\\\|AVG-260710-3988\" /tmp/next-dev4.log)",
+      "Bash(python3 -c ' *)"
     ]
   }
 }

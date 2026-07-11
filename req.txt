@@ -1,0 +1,76 @@
+Avangard Express Corp website — deployment requirements
+=========================================================
+
+This is a Node.js/Next.js project, not Python — there's no pip and this
+file isn't consumed by any tool. `package.json` + `pnpm-lock.yaml` are the
+real source of truth; `pnpm install` reads those directly. This file is a
+plain-text checklist for a human setting up a fresh machine/deploy target.
+
+1. RUNTIME
+----------
+Node.js 20+ (the Dockerfile pins node:22-alpine — use 22 if you have a choice)
+pnpm (enable via corepack, bundled with Node 16.9+):
+    corepack enable
+
+2. INSTALL
+----------
+    pnpm install --frozen-lockfile
+
+3. PRODUCTION DEPENDENCIES (installed automatically by step 2 — versions
+   below are pinned in package.json/pnpm-lock.yaml, listed here for reference)
+----------------------------------------------------------------------------
+next            ^14.2.15   — framework
+react           ^18.3.1
+react-dom       ^18.3.1
+nodemailer      ^6.9.15    — SMTP email delivery (src/lib/mailer.ts)
+zod             ^3.23.8    — form validation (src/lib/schemas.ts)
+lucide-react    ^0.446.0   — icons (menu/close in Header.tsx)
+sharp           ^0.33.5    — only used by `pnpm placeholders`, a dev-only
+                             image-generation script; not needed at runtime
+                             or in the Docker image (see NOTE below)
+
+4. BUILD-TIME / DEV DEPENDENCIES
+---------------------------------
+typescript, @types/node, @types/react, @types/react-dom, @types/nodemailer,
+tailwindcss, postcss, autoprefixer
+(Tailwind is only used by the /privacy and /terms legal pages — the
+homepage and /quote use plain CSS Modules, no Tailwind classes.)
+
+5. ENVIRONMENT VARIABLES (see .env.example — copy it to .env)
+---------------------------------------------------------------
+All optional; the site runs with none set (form submissions just log to
+stdout instead of emailing). Required for real email delivery:
+
+SMTP_HOST                  SMTP relay hostname
+SMTP_PORT                  default 587
+SMTP_USER                  SMTP auth username
+SMTP_PASS                  SMTP auth password
+MAIL_TO                    inbox that receives quote/contact submissions
+                            (defaults to admin1@avangardexpresscorp.com)
+
+Optional:
+NEXT_PUBLIC_SITE_URL       canonical domain — used in metadata/sitemap/robots
+GOOGLE_SITE_VERIFICATION   renders a verification <meta> tag when set
+META_PIXEL_ID              enables Meta/Facebook Pixel tracking when set
+
+6. BUILD & RUN (without Docker)
+---------------------------------
+    pnpm build
+    pnpm start                  # serves on :3000
+
+7. BUILD & RUN (with Docker — recommended, see Dockerfile)
+--------------------------------------------------------------
+    cp .env.example .env        # fill in SMTP_* / MAIL_TO
+    docker compose -f docker-compose.dev.yml up --build     # local, :3000, no TLS
+    docker compose up --build -d                             # production, Caddy + TLS on :80/:443
+
+8. NOTE — stale scripts flagged, not touched
+-----------------------------------------------
+scripts/gen-placeholders.mjs (`pnpm placeholders`) generates hero/OG/fleet
+placeholder images. The site no longer uses any images (removed at your
+request), so running this script now would regenerate files that don't fit
+the current design. scripts/smoke.mjs also predates the rebuild — it tests
+routes/fields (bilingual EN/RU, /api/apply, the old /api/quote shape) that
+no longer exist and would fail as-is. Left both in place rather than
+deleting since you may want to update/keep them — ask if you'd like me to
+either rewrite smoke.mjs against the current site or remove both.

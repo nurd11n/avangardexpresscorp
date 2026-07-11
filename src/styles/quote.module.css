@@ -1,0 +1,327 @@
+/* Ported from the reference quote.html. A CSS Module (see home.module.css
+   for why) — this page is a light "ticket" card floating on the dark page
+   background, a different palette from the home page, so it gets its own
+   variable set. Don't rename this to a plain .css file. */
+
+.quotePage {
+  --asphalt: #14181c;
+  --steel: #232a31;
+  --steel-light: #4a5560;
+  --signal-amber: #f2a93b;
+  --amber-dark: #c98720;
+  --concrete: #edeae3;
+  --concrete-dark: #ded9cb;
+  /* Darker than the reference file's #c1440e — that value is only ~4.26:1
+     against --concrete (this card's own background), under the 4.5:1
+     minimum for text. This passes against both --concrete and white. */
+  --rust: #a63424;
+  --line: #d8d3c6;
+  --ink: #191c1f;
+  --ink-soft: #5b6472;
+
+  background: var(--asphalt);
+  color: var(--ink);
+  padding: 40px 16px;
+  min-height: 100vh;
+}
+
+.topNav {
+  max-width: 640px;
+  margin: 0 auto 20px;
+}
+.topNav a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--signal-amber);
+  text-decoration: none;
+}
+.wrap {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.ticket {
+  background: var(--concrete);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+.ticketTop {
+  background: var(--asphalt);
+  color: var(--concrete);
+  padding: 28px 32px 24px;
+  position: relative;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--signal-amber);
+  margin: 0 0 8px;
+}
+.eyebrow .dash {
+  color: var(--steel-light);
+  margin: 0 6px;
+}
+.ticketTop h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: 0.01em;
+  margin: 0;
+  text-transform: uppercase;
+}
+.sub {
+  font-size: 14px;
+  color: #b7c0cc;
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+.perf {
+  height: 0;
+  border-top: 2px dashed var(--line);
+  position: relative;
+}
+.perf::before,
+.perf::after {
+  content: '';
+  position: absolute;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--asphalt);
+}
+.perf::before {
+  left: -11px;
+}
+.perf::after {
+  right: -11px;
+}
+.bodyPad {
+  padding: 28px 32px 32px;
+}
+
+/* Load type select */
+.routeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 520px) {
+  .routeGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.routeCard {
+  text-align: left;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  padding: 20px 18px;
+  cursor: pointer;
+  transition: border-color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
+  font: inherit;
+  color: inherit;
+  width: 100%;
+}
+.routeCard:hover {
+  border-color: var(--asphalt);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+.routeTag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rust);
+  display: block;
+  margin-bottom: 8px;
+}
+.routeTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  text-transform: uppercase;
+  margin: 0 0 6px;
+}
+.routeDesc {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Forms */
+.field {
+  margin-bottom: 16px;
+}
+.field label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.field input,
+.field textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 11px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 3px;
+  background: #fff;
+  color: var(--ink);
+}
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--asphalt);
+}
+.field textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 520px) {
+  .row2 {
+    grid-template-columns: 1fr;
+  }
+}
+.row3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 520px) {
+  .row3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.backLink {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0 18px;
+  text-decoration: underline;
+}
+
+.submitBtn {
+  width: 100%;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--asphalt);
+  color: var(--signal-amber);
+  border: none;
+  padding: 15px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.12s ease;
+}
+.submitBtn:hover {
+  background: #0c1015;
+}
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.radioPair {
+  display: flex;
+  gap: 10px;
+}
+.radioOpt {
+  flex: 1;
+  text-align: center;
+  border: 1.5px solid var(--line);
+  border-radius: 3px;
+  padding: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+  display: block;
+}
+.radioOpt input {
+  display: none;
+}
+.radioOptChecked {
+  border-color: var(--asphalt);
+  background: var(--concrete-dark);
+  font-weight: 600;
+}
+
+.confirmIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--signal-amber);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--asphalt);
+}
+.confirmTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 8px;
+}
+.confirmSub {
+  text-align: center;
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+.confirmRef {
+  font-family: var(--font-mono);
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 18px;
+  letter-spacing: 0.04em;
+}
+.confirmNote {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 10px;
+  max-width: 42ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.confirmNote a {
+  color: var(--rust);
+}
+
+.step {
+  display: none;
+}
+.stepActive {
+  display: block;
+}

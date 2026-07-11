@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Used by the legal pages (privacy/terms), which still use Tailwind's
+     token classes. The home/quote pages define their own palette in
+     src/styles/{home,quote}.css since they intentionally look different. */
+  --color-ink: #14181c;
+  --color-surface: #232a31;
+  --color-line: #232a31;
+  --color-haze: #8b949e;
+  --color-paper: #f5f7f8;
+  --color-blue: #3e9bcb;
+  --color-blue-deep: #1d5f82;
+  --color-amber: #f2a93b;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -12,76 +26,39 @@
     @apply bg-ink text-paper font-body text-base antialiased;
   }
 
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-weight: 600;
+  }
+
   ::selection {
     @apply bg-blue-deep text-paper;
   }
 
   :focus-visible {
-    outline: 2px solid #3e9bcb;
+    outline: 2px solid var(--color-amber);
     outline-offset: 2px;
-  }
-}
-
-@layer components {
-  /*
-   * Lane rule — 2px dashed section separator proportioned like a US highway
-   * skip line (10ft dash / 30ft gap → 1:3). On first reveal the dashes slide
-   * once, then stop.
-   */
-  .lane-rule {
-    height: 2px;
-    background-image: repeating-linear-gradient(
-      to right,
-      #232a33 0,
-      #232a33 24px,
-      transparent 24px,
-      transparent 96px
-    );
-    background-size: 96px 2px;
-  }
-
-  .lane-rule.is-inview {
-    animation: lane-pass 600ms ease-out 1;
-  }
-
-  @keyframes lane-pass {
-    from {
-      background-position-x: -96px;
-    }
-    to {
-      background-position-x: 0;
-    }
-  }
-
-  /* Section reveal: fade + rise 12px, once. */
-  .reveal {
-    opacity: 0;
-    transform: translateY(12px);
-    transition:
-      opacity 400ms ease-out,
-      transform 400ms ease-out;
-    transition-delay: var(--reveal-delay, 0ms);
-  }
-
-  .reveal.is-inview {
-    opacity: 1;
-    transform: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-
-  .lane-rule.is-inview {
-    animation: none;
-  }
-
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
   }
 
   *,

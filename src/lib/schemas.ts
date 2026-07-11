@@ -7,40 +7,74 @@ const phone = z
   .regex(/^[+()\d\s.-]{7,20}$/, 'invalid_phone');
 const email = z.string().trim().email('invalid_email').max(200);
 const freeText = z.string().trim().max(2000).optional().or(z.literal(''));
+const required = (max: number) => z.string().trim().min(1, 'required').max(max);
+const yesNoUnsure = z.enum(['yes', 'no', 'unsure']);
 
-/** Anti-spam fields shared by both forms. `website` is the honeypot. */
+/** Anti-spam fields shared by every form. `website` is the honeypot. */
 const antiSpam = {
   website: z.string().max(0).optional().or(z.literal('')),
   ts: z.coerce.number(),
 };
 
-export const applySchema = z.object({
-  name,
+const rgnQuoteSchema = z.object({
+  kind: z.literal('rgn'),
+  fullName: name,
+  companyName: required(200),
   phone,
   email,
-  experience: z.coerce.number().min(0, 'required').max(60),
-  driverType: z.enum(['owner-operator', 'company-driver']),
-  message: freeText,
+  pickup: required(200),
+  delivery: required(200),
+  pickupDate: required(20),
+  cargoType: required(200),
+  length: z.coerce.number().positive('required'),
+  width: z.coerce.number().positive('required'),
+  height: z.coerce.number().positive('required'),
+  weight: z.coerce.number().positive('required'),
+  pieces: z.coerce.number().int().min(1, 'required'),
+  permits: yesNoUnsure,
+  escort: yesNoUnsure,
+  notes: freeText,
   ...antiSpam,
 });
 
-export const quoteSchema = z.object({
+const dryVanQuoteSchema = z.object({
+  kind: z.literal('dryvan'),
+  fullName: name,
+  companyName: required(200),
+  phone,
+  email,
+  pickup: required(200),
+  delivery: required(200),
+  pickupDate: required(20),
+  freightType: required(200),
+  weight: z.coerce.number().positive('required'),
+  units: z.coerce.number().int().min(1, 'required'),
+  loadSize: z.enum(['full', 'partial', 'unsure']),
+  notes: freeText,
+  ...antiSpam,
+});
+
+/** The lightweight home-page contact form — no phone collected, by design. */
+const quickQuoteSchema = z.object({
+  kind: z.literal('quick'),
   name,
   company: z.string().trim().max(200).optional().or(z.literal('')),
-  phone,
   email,
-  origin: z.string().trim().min(2, 'required').max(200),
-  destination: z.string().trim().min(2, 'required').max(200),
-  freight: z.string().trim().min(2, 'required').max(500),
-  message: freeText,
+  lane: z.string().trim().max(200).optional().or(z.literal('')),
+  details: freeText,
   ...antiSpam,
 });
 
-export type ApplyInput = z.infer<typeof applySchema>;
-export type QuoteInput = z.infer<typeof quoteSchema>;
+export const quoteRequestSchema = z.discriminatedUnion('kind', [
+  rgnQuoteSchema,
+  dryVanQuoteSchema,
+  quickQuoteSchema,
+]);
+
+export type QuoteRequestInput = z.infer<typeof quoteRequestSchema>;
 
 export type ApiResponse =
-  | { ok: true }
+  | { ok: true; ref: string }
   | { ok: false; errors: Record<string, string> };
 
 export function zodFieldErrors(error: z.ZodError): Record<string, string> {

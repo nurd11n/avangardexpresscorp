@@ -6,6 +6,31 @@ import { sendMail } from '@/lib/mailer';
 
 const MIN_SUBMIT_MS = 2000;
 
+function generateRef(): string {
+  const now = new Date();
+  const yy = String(now.getUTCFullYear()).slice(2);
+  const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(now.getUTCDate()).padStart(2, '0');
+  const rand = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(4, '0');
+  return `AVG-${yy}${mm}${dd}-${rand}`;
+}
+
+/** Strips angle brackets from every string field so submitted data can never carry markup. */
+function stripHtml<T>(data: T): T {
+  if (typeof data === 'string') return data.replace(/[<>]/g, '') as unknown as T;
+  if (Array.isArray(data)) return data.map(stripHtml) as unknown as T;
+  if (data && typeof data === 'object') {
+    const out: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
+      out[key] = stripHtml(value);
+    }
+    return out as T;
+  }
+  return data;
+}
+
 /**
  * Shared POST handler for both forms: rate limit → honeypot → validate → mail.
  * Bots get a fake success so they don't learn what tripped them.
@@ -13,7 +38,7 @@ const MIN_SUBMIT_MS = 2000;
 export async function handleFormPost<T extends { website?: string; ts: number }>(
   req: Request,
   schema: ZodSchema<T>,
-  toMail: (data: T) => { subject: string; text: string },
+  toMail: (data: T, ref: string) => { subject: string; text: string },
 ): Promise<NextResponse<ApiResponse>> {
   if (rateLimited(clientIp(req))) {
     return NextResponse.json(
@@ -37,7 +62,7 @@ export async function handleFormPost<T extends { website?: string; ts: number }>
   const tooFast =
     typeof raw?.ts === 'number' && Date.now() - raw.ts < MIN_SUBMIT_MS;
   if ((typeof raw?.website === 'string' && raw.website.length > 0) || tooFast) {
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, ref: generateRef() });
   }
 
   const parsed = schema.safeParse(body);
@@ -48,8 +73,9 @@ export async function handleFormPost<T extends { website?: string; ts: number }>
     );
   }
 
+  const ref = generateRef();
   try {
-    await sendMail(toMail(parsed.data));
+    await sendMail(toMail(stripHtml(parsed.data), ref));
   } catch (err) {
     console.error('[mailer] send failed:', err);
     return NextResponse.json(
@@ -58,5 +84,5 @@ export async function handleFormPost<T extends { website?: string; ts: number }>
     );
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, ref });
 }

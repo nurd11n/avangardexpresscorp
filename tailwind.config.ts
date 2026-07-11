@@ -10,14 +10,15 @@ const config: Config = {
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
-      ink: '#0B0D10',
-      surface: '#14181E',
-      line: '#232A33',
-      haze: '#8B949E',
-      paper: '#F5F7F8',
-      blue: '#3E9BCB',
-      'blue-deep': '#1D5F82',
-      amber: '#F2A83B',
+      // Used by the legal pages only — home/quote use their own CSS files.
+      ink: 'var(--color-ink)',
+      surface: 'var(--color-surface)',
+      line: 'var(--color-line)',
+      haze: 'var(--color-haze)',
+      paper: 'var(--color-paper)',
+      blue: 'var(--color-blue)',
+      'blue-deep': 'var(--color-blue-deep)',
+      amber: 'var(--color-amber)',
     },
     fontFamily: {
       display: ['var(--font-display)', 'sans-serif'],

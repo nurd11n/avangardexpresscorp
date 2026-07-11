@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
-import { cookies, headers } from 'next/headers';
 import Script from 'next/script';
 import { site } from '@content/site';
-import { LANG_COOKIE, isLang, langFromAcceptLanguage, type Lang } from '@/lib/i18n';
-import { LangProvider } from '@/lib/lang-context';
 import { display, body, mono } from './fonts';
 import './globals.css';
 
@@ -12,98 +9,46 @@ const SITE_URL =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: `${site.legalName} — US Freight Carrier · Dry Van, Reefer, Flatbed`,
+  title: `${site.legalName} | Full Truckload Freight`,
   description:
-    `Asset-based trucking carrier out of ${site.address.city}, ${site.address.state}. ` +
-    'Dry van, reefer, flatbed and expedited freight across 48 states. Hiring CDL-A owner-operators. Dispatch 24/7, EN/RU.',
-  alternates: {
-    canonical: SITE_URL,
-    languages: {
-      en: SITE_URL,
-      ru: SITE_URL,
-      'x-default': SITE_URL,
-    },
-  },
+    'Dedicated full truckload freight — one shipper, one trailer, no detours. Dry van capacity, direct dispatch, nationwide continental US coverage.',
+  alternates: { canonical: SITE_URL },
   openGraph: {
     type: 'website',
     url: SITE_URL,
     siteName: site.legalName,
-    title: `${site.legalName} — US Freight Carrier`,
-    description:
-      'Dry van, reefer, flatbed and expedited freight across 48 states. Hiring CDL-A owner-operators.',
-    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: site.legalName }],
+    title: `${site.legalName} | Full Truckload Freight`,
+    description: 'Dedicated full truckload freight across the continental United States.',
   },
   twitter: {
-    card: 'summary_large_image',
-    title: `${site.legalName} — US Freight Carrier`,
-    images: ['/og.jpg'],
+    card: 'summary',
+    title: `${site.legalName} | Full Truckload Freight`,
   },
   verification: process.env.GOOGLE_SITE_VERIFICATION
     ? { google: process.env.GOOGLE_SITE_VERIFICATION }
     : undefined,
 };
 
-function resolveLang(): Lang {
-  const cookie = cookies().get(LANG_COOKIE)?.value;
-  if (isLang(cookie)) return cookie;
-  return langFromAcceptLanguage(headers().get('accept-language'));
-}
-
+// A single JSON-LD object per <script> tag — some structured-data readers
+// (Safari's built-in one included) choke on a bare top-level array with no
+// "@context", throwing on `r["@context"].toLowerCase()`.
 function jsonLd() {
-  const address = {
-    '@type': 'PostalAddress',
-    streetAddress: site.address.street,
-    addressLocality: site.address.city,
-    addressRegion: site.address.state,
-    postalCode: site.address.zip,
-    addressCountry: 'US',
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: site.legalName,
+    url: SITE_URL,
+    email: site.email,
   };
-
-  return [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      name: site.legalName,
-      url: SITE_URL,
-      telephone: site.phone,
-      email: site.email,
-      address,
-      sameAs: [site.social.instagram],
-    },
-    {
-      '@context': 'https://schema.org',
-      // MovingCompany is the closest schema.org fit for a freight carrier.
-      '@type': 'MovingCompany',
-      name: site.legalName,
-      url: SITE_URL,
-      telephone: site.phone,
-      email: site.email,
-      address,
-      openingHours: 'Mo-Fr 08:00-18:00',
-      areaServed: 'US',
-      sameAs: [site.social.instagram],
-      image: `${SITE_URL}/og.jpg`,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: site.faq.map((f) => ({
-        '@type': 'Question',
-        name: f.q.en,
-        acceptedAnswer: { '@type': 'Answer', text: f.a.en },
-      })),
-    },
-  ];
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const lang = resolveLang();
   const pixelId = process.env.META_PIXEL_ID;
 
   return (
-    <html lang={lang} className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>
-        <LangProvider lang={lang}>{children}</LangProvider>
+        {children}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()) }}

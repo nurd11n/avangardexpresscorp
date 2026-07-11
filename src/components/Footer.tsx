@@ -1,29 +1,17 @@
 import { site } from '@content/site';
-import { dict, t, type Lang } from '@/lib/i18n';
+import styles from '@/styles/home.module.css';
 
-export function Footer({ lang }: { lang: Lang }) {
+export function Footer() {
   return (
-    <footer className="border-t border-line">
-      <div className="mx-auto flex w-full max-w-site flex-col items-start justify-between gap-3 px-6 py-8 font-mono text-xs text-haze sm:flex-row sm:items-center">
-        <p>
-          {site.legalName} · USDOT {site.dot} · {site.mc} · © {new Date().getFullYear()}
-        </p>
-        <nav aria-label="Legal" className="flex items-center gap-5">
-          <a href="/privacy" className="transition-colors duration-150 hover:text-paper">
-            {t(dict.footer.privacy, lang)}
-          </a>
-          <a href="/terms" className="transition-colors duration-150 hover:text-paper">
-            {t(dict.footer.terms, lang)}
-          </a>
-          <a
-            href={site.social.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transition-colors duration-150 hover:text-paper"
-          >
-            Instagram
-          </a>
-        </nav>
+    <footer className={styles.footer}>
+      <div className={styles.footerInner}>
+        <span>
+          © {new Date().getFullYear()} {site.legalName}. All rights reserved.
+        </span>
+        <span>
+          Full Truckload Freight — Continental US · <a href="/privacy">Privacy</a> ·{' '}
+          <a href="/terms">Terms</a>
+        </span>
       </div>
     </footer>
   );

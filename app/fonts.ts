@@ -1,22 +1,18 @@
+import { Oswald, Inter } from 'next/font/google';
 import localFont from 'next/font/local';
 
-export const display = localFont({
-  src: [
-    { path: '../src/fonts/overpass-latin-600.woff2', weight: '600', style: 'normal' },
-    { path: '../src/fonts/overpass-latin-700.woff2', weight: '700', style: 'normal' },
-    { path: '../src/fonts/overpass-cyrillic-600.woff2', weight: '600', style: 'normal' },
-    { path: '../src/fonts/overpass-cyrillic-700.woff2', weight: '700', style: 'normal' },
-  ],
+// Oswald has no Cyrillic subset; RU headings fall back to system sans —
+// same pattern this file already used for the previous display/body fonts.
+export const display = Oswald({
+  subsets: ['latin'],
+  weight: ['600', '700'],
   variable: '--font-display',
   display: 'swap',
 });
 
-// Public Sans has no Cyrillic subset; RU body text falls back to system sans.
-export const body = localFont({
-  src: [
-    { path: '../src/fonts/public-sans-latin-400.woff2', weight: '400', style: 'normal' },
-    { path: '../src/fonts/public-sans-latin-500.woff2', weight: '500', style: 'normal' },
-  ],
+export const body = Inter({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500'],
   variable: '--font-body',
   display: 'swap',
 });
