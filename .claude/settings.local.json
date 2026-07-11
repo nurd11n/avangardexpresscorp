@@ -15,7 +15,9 @@
       "Bash(grep -A 15 \"AVG-260710-8328\" /tmp/next-dev.log)",
       "Bash(git mv *)",
       "Bash(grep -A 18 \"AVG-260710-8647\\\\|AVG-260710-8072\\\\|AVG-260710-3988\" /tmp/next-dev4.log)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
